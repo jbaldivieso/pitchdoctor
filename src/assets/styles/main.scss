@@ -33,10 +33,118 @@ body {
   background-color: $scheme-main;
   color: $text;
   min-height: 100dvh;
+  // Prevent text size adjustment on orientation change (iOS)
+  -webkit-text-size-adjust: 100%;
 }
 
 // Ensure minimum tap-target sizes per Apple HIG (44×44pt)
-.button.is-large {
+.button {
   min-height: 44px;
   min-width: 44px;
+  touch-action: manipulation; // Disable double-tap zoom on buttons
+}
+
+// ── Typography ────────────────────────────────────────────────────────────────
+
+.app-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: $text;
+  line-height: 1.2;
+
+  .app-title-accent {
+    color: $primary;
+  }
+}
+
+.app-subtitle {
+  font-size: 0.8rem;
+  color: $text-light;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+// ── Settings gear button ──────────────────────────────────────────────────────
+
+.settings-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: $text-light;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  &:hover,
+  &:focus {
+    background: rgba(255, 255, 255, 0.06);
+    color: $text;
+    border-color: rgba(255, 255, 255, 0.2);
+    outline: none;
+  }
+
+  &:active {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &[disabled] {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+// ── Vue transition classes ────────────────────────────────────────────────────
+
+// Fade for settings panel and other overlays
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// Slide-up for content blocks changing between states
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+// ── Box overrides ─────────────────────────────────────────────────────────────
+
+.box {
+  background-color: $scheme-main-bis;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+// ── Notification overrides ────────────────────────────────────────────────────
+
+.notification.is-danger.is-light {
+  background-color: rgba(233, 69, 96, 0.12);
+  border: 1px solid rgba(233, 69, 96, 0.3);
+  color: #f5a0b0;
+}
+
+// ── Tag overrides ─────────────────────────────────────────────────────────────
+
+.tag.is-dark {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: $text;
 }

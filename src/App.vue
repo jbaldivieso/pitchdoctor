@@ -78,50 +78,77 @@ async function handleTryAgain() {
 async function handleNewSequence() {
   await handlePlay()
 }
+
+const settingsAvailable = computed(
+  () => state.value === 'idle' || state.value === 'results'
+)
 </script>
 
 <template>
-  <section class="section">
+  <section class="section py-5">
     <div class="container" style="max-width: 480px">
+
+      <!-- Header -->
       <div class="is-flex is-justify-content-space-between is-align-items-center mb-5">
-        <h1 class="title mb-0">Pitch Doctor</h1>
+        <div>
+          <div class="app-title">
+            Pitch<span class="app-title-accent">Doctor</span>
+          </div>
+          <div class="app-subtitle">Sing it back</div>
+        </div>
         <button
-          class="button is-ghost"
-          :disabled="state !== 'idle' && state !== 'results'"
+          class="settings-btn"
+          :disabled="!settingsAvailable"
           @click="showSettings = !showSettings"
-          aria-label="Toggle settings"
+          :aria-label="showSettings ? 'Close settings' : 'Open settings'"
+          :aria-expanded="showSettings"
         >
-          &#9881;
+          {{ showSettings ? '✕' : '⚙' }}
         </button>
       </div>
 
-      <!-- Settings panel -->
-      <div v-if="showSettings" class="mb-5">
-        <SettingsPanel :settings="settings" />
-      </div>
+      <!-- Settings panel (fade transition) -->
+      <transition name="fade">
+        <div v-if="showSettings" class="mb-5">
+          <SettingsPanel :settings="settings" @close="showSettings = false" />
+        </div>
+      </transition>
 
-      <!-- Note sequence display (idle, playing, results) -->
-      <div v-if="state !== 'listening'" class="mb-5">
-        <NoteDisplay :notes="currentSequence" :activeIndex="activeNoteIndex" />
-      </div>
+      <!-- Main content area (slide-up transition on state changes) -->
+      <transition name="slide-up" mode="out-in">
 
-      <!-- Listening phase -->
-      <div v-if="state === 'listening'" class="mb-5">
-        <ListeningIndicator />
-      </div>
+        <!-- Listening phase -->
+        <div v-if="state === 'listening'" key="listening" class="mb-5">
+          <ListeningIndicator />
+        </div>
 
-      <!-- Results phase -->
-      <div v-if="state === 'results'" class="mb-5">
-        <ResultsPanel :results="pitchResults" />
-      </div>
+        <!-- Playing / idle / results: show note display -->
+        <div v-else key="display" class="mb-5">
+          <NoteDisplay :notes="currentSequence" :activeIndex="activeNoteIndex" />
+        </div>
+
+      </transition>
+
+      <!-- Results panel (fade in when results arrive) -->
+      <transition name="fade">
+        <div v-if="state === 'results'" class="mb-5">
+          <ResultsPanel :results="pitchResults" />
+        </div>
+      </transition>
 
       <!-- Mic error message -->
-      <div v-if="micError" class="notification is-danger is-light mb-4">
-        <strong>Microphone error:</strong> {{ micError }}
-      </div>
+      <transition name="fade">
+        <div v-if="micError" class="notification is-danger is-light mb-4">
+          <p><strong>Microphone access required</strong></p>
+          <p class="mt-1" style="font-size: 0.9rem;">
+            {{ micError }}. To fix this, open your device Settings → Safari (or your
+            browser) → Microphone and allow access, then reload the page.
+          </p>
+        </div>
+      </transition>
 
       <!-- Action buttons -->
-      <div class="has-text-centered">
+      <div class="has-text-centered mt-4">
         <PlayButton
           :appState="state"
           @play="handlePlay"
@@ -129,6 +156,7 @@ async function handleNewSequence() {
           @newSequence="handleNewSequence"
         />
       </div>
+
     </div>
   </section>
 </template>

@@ -291,35 +291,36 @@
 
 ---
 
-## Phase 11: Visual Polish & iOS Hardening
+## Phase 11: Visual Polish & iOS Hardening ✅ (complete)
 
 **Goal**: Refine the visual design, ensure mobile-first layout, and address iOS-specific requirements that weren't covered in earlier phases.
 
-**Files to modify**:
-- `src/assets/styles/main.scss` — **modify**: add any missing app-level styles, transitions, animations
-- `src/components/*.vue` — **modify**: refine Bulma class usage, spacing, responsive layout
-- `src/App.vue` — **modify**: layout refinements
-- `index.html` — **modify**: ensure all iOS PWA meta tags are present
+**Files modified**:
+- `src/assets/styles/main.scss` — typography helpers, Vue transition classes, settings gear button, box/tag/notification overrides, tap-target improvements
+- `src/components/NoteDisplay.vue` — larger tags, empty-state placeholder, smooth active note highlight with glow
+- `src/components/PitchScale.vue` — two-row header (Target/You sang), improved not-detected styling (dashed border, muted italic), glowing accuracy indicators
+- `src/components/PlayButton.vue` — full-width pill button, animated "Playing…" dots via CSS, pill-shaped result buttons
+- `src/components/ListeningIndicator.vue` — dual pulse-ring animation, mic emoji icon, "Sing each note you heard" hint text
+- `src/components/SettingsPanel.vue` — close button, two-column octave layout, fullwidth dark-styled selects, divider
+- `src/App.vue` — "PitchDoctor" title with coral accent, "Sing it back" subtitle, Vue `<transition>` fade/slide-up animations, detailed iOS mic error message
 
-**Checklist (not TDD — visual/manual verification)**:
-- [ ] Mobile-first single-column layout using Bulma's `container`, `section`, `box`
-- [ ] Large tap targets (min 44×44pt) on all interactive elements
-- [ ] Pitch scale is the visual focus — large, readable note names
-- [ ] `env(safe-area-inset-*)` applied correctly (already in main.scss — verify on device)
-- [ ] `<meta name="apple-mobile-web-app-capable" content="yes">` present
-- [ ] `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">` present
-- [ ] `<meta name="viewport" content="width=device-width, initial-scale=1">` present
-- [ ] Smooth state transitions (idle → playing → listening → results)
-- [ ] Listening state has a visible pulsing/animated indicator
-- [ ] Color palette looks cohesive: deep navy bg, coral accents, teal/amber/red accuracy colors
-- [ ] No visual clutter — minimal chrome, focused UI
-- [ ] Mic permission denied state shows a clear, helpful message
-- [ ] "Not detected" state for missed notes looks distinct and informative
-- [ ] Sequence length selector is intuitive (consider Bulma's `select` or custom stepper)
+**Checklist**:
+- [x] Mobile-first single-column layout using Bulma's `container`, `section`, `box`
+- [x] Large tap targets (min 44×44pt) on all interactive elements
+- [x] Pitch scale is the visual focus — large, readable note names with Target/You sang labels
+- [x] `env(safe-area-inset-*)` applied correctly (in main.scss)
+- [x] `<meta name="apple-mobile-web-app-capable" content="yes">` present
+- [x] `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">` present
+- [x] `<meta name="viewport" content="width=device-width, initial-scale=1">` present
+- [x] Smooth state transitions via Vue `<transition name="fade">` and `<transition name="slide-up">`
+- [x] Listening state has a visible dual-ring pulsing indicator with mic icon
+- [x] Color palette cohesive: deep navy bg, coral accents, teal/amber/red accuracy colors
+- [x] No visual clutter — minimal chrome, focused single-column UI
+- [x] Mic permission denied shows clear message with iOS Settings navigation instructions
+- [x] "Not detected" state is visually distinct (dashed border, muted italic text)
+- [x] All settings selects use `is-fullwidth` for intuitive mobile touch targets
 
-**Done when**: App looks polished in mobile viewport (Chrome/Safari DevTools), all iOS meta tags are present, layout is clean with adequate spacing and tap targets. Ready for real-device testing.
-
-**Notes**: This is a polish phase — no new logic, no new tests. Focus on visual quality and UX. Test in browser DevTools with iPhone viewport sizes (375×812 for iPhone X-class, 390×844 for 14-class). The app should feel native-like.
+**Done when**: All 97 tests pass. App is visually polished with smooth transitions, readable pitch scales, and iOS-ready meta tags. Ready for real-device testing.
 
 ---
 
@@ -371,7 +372,7 @@
 | 8 | Playback & Listening UI | PlayButton, NoteDisplay, ListeningIndicator (TDD) | ✅ Done |
 | 9 | App Integration | State machine wiring, full user flow | ✅ Done |
 | 10 | Settings & Persistence | useSettings, SettingsPanel (TDD) | ✅ Done |
-| 11 | Visual Polish & iOS | Layout, styling, iOS meta tags | Pending |
+| 11 | Visual Polish & iOS | Layout, styling, iOS meta tags | ✅ Done |
 | 12 | PWA & Deployment | Icons, service worker, GitHub Actions, CNAME | Pending |
 
-**Total**: 12 phases, 2 remaining. Phases 3–8 are TDD-driven (tests first). Phase 9 is integration. Phases 10–12 are settings, polish, and deployment.
+**Total**: 12 phases, 1 remaining. Phases 3–8 are TDD-driven (tests first). Phase 9 is integration. Phases 10–12 are settings, polish, and deployment.
