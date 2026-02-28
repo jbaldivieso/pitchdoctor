@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { centsDeviation, classifyAccuracy, frequencyToNoteName } from '@/lib/pitchUtils'
+import { centsDeviation, classifyAccuracy, frequencyToNoteName, octaveNormalizedCents } from '@/lib/pitchUtils'
 
 describe('centsDeviation', () => {
   test('returns 0 for exact frequency match', () => {
@@ -47,6 +47,33 @@ describe('classifyAccuracy', () => {
   test('off beyond ±25 cents', () => {
     expect(classifyAccuracy(26)).toBe('off')
     expect(classifyAccuracy(-50)).toBe('off')
+  })
+})
+
+describe('octaveNormalizedCents', () => {
+  test('0 cents stays 0 (perfect unison)', () => {
+    expect(octaveNormalizedCents(0)).toBe(0)
+  })
+  test('+1200 cents (exact octave sharp) → 0', () => {
+    expect(octaveNormalizedCents(1200)).toBe(0)
+  })
+  test('-1200 cents (exact octave flat) → 0', () => {
+    expect(octaveNormalizedCents(-1200)).toBe(0)
+  })
+  test('+1250 cents (octave + 50¢ sharp) → +50', () => {
+    expect(octaveNormalizedCents(1250)).toBe(50)
+  })
+  test('-1150 cents (octave - 50¢, i.e. 50¢ sharp of lower octave) → +50', () => {
+    expect(octaveNormalizedCents(-1150)).toBe(50)
+  })
+  test('+2400 cents (two octaves) → 0', () => {
+    expect(octaveNormalizedCents(2400)).toBe(0)
+  })
+  test('+30 cents passes through unchanged', () => {
+    expect(octaveNormalizedCents(30)).toBe(30)
+  })
+  test('-30 cents passes through unchanged', () => {
+    expect(octaveNormalizedCents(-30)).toBe(-30)
   })
 })
 

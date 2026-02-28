@@ -25,10 +25,6 @@ const accuracyClass = computed(() => {
   }
 })
 
-const centsText = computed(() => {
-  const c = Math.round(props.result.centsDeviation)
-  return c >= 0 ? `+${c}¢` : `${c}¢`
-})
 </script>
 
 <template>
@@ -44,7 +40,6 @@ const centsText = computed(() => {
         <span class="pitch-label">You sang</span>
         <span v-if="result.detected" :class="['tag', 'is-medium', 'note-name-tag', accuracyClass]">
           {{ result.detected.name }}
-          <span class="cents-text">{{ centsText }}</span>
         </span>
         <span v-else class="tag is-medium note-name-tag not-detected-tag">
           <span class="not-detected-icon">—</span>
@@ -108,13 +103,6 @@ const centsText = computed(() => {
   height: 2rem;
   padding: 0 0.6rem;
   border-radius: 6px;
-}
-
-.cents-text {
-  margin-left: 0.3em;
-  font-size: 0.8em;
-  font-weight: 500;
-  opacity: 0.85;
 }
 
 /* Not detected styling: muted, with a dash indicator */

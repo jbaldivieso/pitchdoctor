@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { PitchDetector } from 'pitchy'
 import { NoteSegmenter } from '@/lib/noteSegmenter'
-import { frequencyToNoteName, centsDeviation, classifyAccuracy } from '@/lib/pitchUtils'
+import { frequencyToNoteName, centsDeviation, classifyAccuracy, octaveNormalizedCents } from '@/lib/pitchUtils'
 import type { NoteSequence, PitchResult } from '@/types'
 
 const TIMEOUT_MS = 8000
@@ -89,7 +89,8 @@ function buildResults(
     }
     const freq = seg.medianFrequency
     const noteName = frequencyToNoteName(freq) ?? target.name
-    const cents = centsDeviation(freq, target.frequency)
+    const rawCents = centsDeviation(freq, target.frequency)
+    const cents = octaveNormalizedCents(rawCents)
     const accuracy = classifyAccuracy(cents)
     return {
       target,

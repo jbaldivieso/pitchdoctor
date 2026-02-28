@@ -32,3 +32,15 @@ export function classifyAccuracy(
   if (abs <= 25) return 'acceptable'
   return 'off'
 }
+
+/**
+ * Normalize a cents deviation so that octave errors are forgiven.
+ * Maps rawCents to the equivalent deviation from the nearest octave,
+ * in the range (-600, 600].
+ *
+ * Examples: +1200 → 0, +1250 → +50, -1150 → +50, +2400 → 0
+ */
+export function octaveNormalizedCents(rawCents: number): number {
+  const mod = ((rawCents % 1200) + 1200) % 1200
+  return mod > 600 ? mod - 1200 : mod
+}
