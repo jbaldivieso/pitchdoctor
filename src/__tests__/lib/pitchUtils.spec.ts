@@ -69,6 +69,15 @@ describe('octaveNormalizedCents', () => {
   test('+2400 cents (two octaves) → 0', () => {
     expect(octaveNormalizedCents(2400)).toBe(0)
   })
+  test('-2400 cents (two octaves flat) → 0', () => {
+    expect(octaveNormalizedCents(-2400)).toBe(0)
+  })
+  test('+3600 cents (three octaves) → 0', () => {
+    expect(octaveNormalizedCents(3600)).toBe(0)
+  })
+  test('+2450 cents (two octaves + 50¢) → +50', () => {
+    expect(octaveNormalizedCents(2450)).toBe(50)
+  })
   test('+30 cents passes through unchanged', () => {
     expect(octaveNormalizedCents(30)).toBe(30)
   })
