@@ -257,7 +257,7 @@
 
 ---
 
-## Phase 10: Settings & Persistence
+## Phase 10: Settings & Persistence ✅ (complete)
 
 **Goal**: TDD the settings composable and settings panel component. Wire settings into the app so user preferences persist across sessions.
 
@@ -370,8 +370,8 @@
 | 7 | Results Display | PitchScale, ResultsPanel (TDD) | Pending |
 | 8 | Playback & Listening UI | PlayButton, NoteDisplay, ListeningIndicator (TDD) | ✅ Done |
 | 9 | App Integration | State machine wiring, full user flow | ✅ Done |
-| 10 | Settings & Persistence | useSettings, SettingsPanel (TDD) | Pending |
+| 10 | Settings & Persistence | useSettings, SettingsPanel (TDD) | ✅ Done |
 | 11 | Visual Polish & iOS | Layout, styling, iOS meta tags | Pending |
 | 12 | PWA & Deployment | Icons, service worker, GitHub Actions, CNAME | Pending |
 
-**Total**: 12 phases, 10 remaining. Phases 3–8 are TDD-driven (tests first). Phase 9 is integration. Phases 10–12 are settings, polish, and deployment.
+**Total**: 12 phases, 2 remaining. Phases 3–8 are TDD-driven (tests first). Phase 9 is integration. Phases 10–12 are settings, polish, and deployment.

@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import type { AppState, NoteSequence, PitchResult } from './types'
 import { useNoteGenerator } from './composables/useNoteGenerator'
 import { useAudioPlayer } from './composables/useAudioPlayer'
 import { usePitchDetector } from './composables/usePitchDetector'
+import { useSettings } from './composables/useSettings'
 import PlayButton from './components/PlayButton.vue'
 import NoteDisplay from './components/NoteDisplay.vue'
 import ListeningIndicator from './components/ListeningIndicator.vue'
 import ResultsPanel from './components/ResultsPanel.vue'
+import SettingsPanel from './components/SettingsPanel.vue'
 
 // Timing constants must match useAudioPlayer internals
 const NOTE_INTERVAL_MS = 1100 // 0.8s duration + 0.3s gap
 
-// Settings (hardcoded until Phase 10: useSettings)
-const sequenceLength = ref(3)
-const synthVoice = ref<'sine' | 'soft' | 'piano'>('soft')
-const generatorConfig = { rootNote: 'C', lowOctave: 3, highOctave: 5 }
+const { settings } = useSettings()
+const showSettings = ref(false)
 
 const state = ref<AppState>('idle')
 const currentSequence = ref<NoteSequence>([])
@@ -26,6 +26,12 @@ const micError = ref<string | null>(null)
 const { generate } = useNoteGenerator()
 const { play } = useAudioPlayer()
 const { listen, error: detectorError } = usePitchDetector()
+
+const generatorConfig = computed(() => ({
+  rootNote: settings.rootNote,
+  lowOctave: settings.lowOctave,
+  highOctave: settings.highOctave,
+}))
 
 /**
  * Core flow: play a sequence then listen for the user to sing it back.
@@ -42,7 +48,7 @@ async function runFlow(sequence: NoteSequence) {
     }, i * NOTE_INTERVAL_MS)
   }
 
-  await play(sequence, synthVoice.value)
+  await play(sequence, settings.synthVoice)
   activeNoteIndex.value = null
 
   // --- LISTENING phase ---
@@ -60,7 +66,7 @@ async function runFlow(sequence: NoteSequence) {
 }
 
 async function handlePlay() {
-  const seq = generate(sequenceLength.value, generatorConfig)
+  const seq = generate(settings.sequenceLength, generatorConfig.value)
   currentSequence.value = seq
   await runFlow(seq)
 }
@@ -77,7 +83,22 @@ async function handleNewSequence() {
 <template>
   <section class="section">
     <div class="container" style="max-width: 480px">
-      <h1 class="title has-text-centered mb-5">Pitch Doctor</h1>
+      <div class="is-flex is-justify-content-space-between is-align-items-center mb-5">
+        <h1 class="title mb-0">Pitch Doctor</h1>
+        <button
+          class="button is-ghost"
+          :disabled="state !== 'idle' && state !== 'results'"
+          @click="showSettings = !showSettings"
+          aria-label="Toggle settings"
+        >
+          &#9881;
+        </button>
+      </div>
+
+      <!-- Settings panel -->
+      <div v-if="showSettings" class="mb-5">
+        <SettingsPanel :settings="settings" />
+      </div>
 
       <!-- Note sequence display (idle, playing, results) -->
       <div v-if="state !== 'listening'" class="mb-5">
@@ -100,25 +121,13 @@ async function handleNewSequence() {
       </div>
 
       <!-- Action buttons -->
-      <div class="has-text-centered mb-5">
+      <div class="has-text-centered">
         <PlayButton
           :appState="state"
           @play="handlePlay"
           @tryAgain="handleTryAgain"
           @newSequence="handleNewSequence"
         />
-      </div>
-
-      <!-- Sequence length selector (idle only) -->
-      <div v-if="state === 'idle'" class="field has-text-centered">
-        <label class="label has-text-light">Notes in sequence</label>
-        <div class="control">
-          <div class="select">
-            <select v-model="sequenceLength">
-              <option v-for="n in 7" :key="n" :value="n">{{ n }}</option>
-            </select>
-          </div>
-        </div>
       </div>
     </div>
   </section>
