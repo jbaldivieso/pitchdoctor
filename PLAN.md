@@ -136,7 +136,7 @@
 
 ---
 
-## Phase 6: Pitch Detector Composable (Mic + pitchy)
+## Phase 6: Pitch Detector Composable (Mic + pitchy) ✅
 
 **Goal**: TDD the `usePitchDetector` composable that handles microphone access, real-time pitch detection via pitchy, and feeds readings into the note segmenter.
 
@@ -366,7 +366,7 @@
 | 3 | Note Generation | majorScale tests, useNoteGenerator (TDD) | Pending |
 | 4 | Note Segmentation | noteSegmenter (TDD) | Pending |
 | 5 | Audio Player | useAudioPlayer with Tone.js (TDD) | Pending |
-| 6 | Pitch Detector | usePitchDetector with mic + pitchy (TDD) | Pending |
+| 6 | Pitch Detector | usePitchDetector with mic + pitchy (TDD) | ✅ Done |
 | 7 | Results Display | PitchScale, ResultsPanel (TDD) | Pending |
 | 8 | Playback & Listening UI | PlayButton, NoteDisplay, ListeningIndicator (TDD) | Pending |
 | 9 | App Integration | State machine wiring, full user flow | Pending |
