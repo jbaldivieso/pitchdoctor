@@ -230,7 +230,7 @@
 
 ---
 
-## Phase 9: App Integration — State Machine Wiring
+## Phase 9: App Integration — State Machine Wiring ✅ (complete)
 
 **Goal**: Wire all composables and components together in `App.vue`, implementing the full state machine (idle → playing → listening → results) and the complete user flow.
 
@@ -369,7 +369,7 @@
 | 6 | Pitch Detector | usePitchDetector with mic + pitchy (TDD) | Pending |
 | 7 | Results Display | PitchScale, ResultsPanel (TDD) | Pending |
 | 8 | Playback & Listening UI | PlayButton, NoteDisplay, ListeningIndicator (TDD) | ✅ Done |
-| 9 | App Integration | State machine wiring, full user flow | Pending |
+| 9 | App Integration | State machine wiring, full user flow | ✅ Done |
 | 10 | Settings & Persistence | useSettings, SettingsPanel (TDD) | Pending |
 | 11 | Visual Polish & iOS | Layout, styling, iOS meta tags | Pending |
 | 12 | PWA & Deployment | Icons, service worker, GitHub Actions, CNAME | Pending |
