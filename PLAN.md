@@ -164,7 +164,7 @@
 
 ---
 
-## Phase 7: Results Display Components (PitchScale + ResultsPanel)
+## Phase 7: Results Display Components (PitchScale + ResultsPanel) ✅
 
 **Goal**: TDD the results visualization components — the horizontal pitch accuracy meter and the panel that stacks them.
 
@@ -367,7 +367,7 @@
 | 4 | Note Segmentation | noteSegmenter (TDD) | Pending |
 | 5 | Audio Player | useAudioPlayer with Tone.js (TDD) | Pending |
 | 6 | Pitch Detector | usePitchDetector with mic + pitchy (TDD) | ✅ Done |
-| 7 | Results Display | PitchScale, ResultsPanel (TDD) | Pending |
+| 7 | Results Display | PitchScale, ResultsPanel (TDD) | ✅ Done |
 | 8 | Playback & Listening UI | PlayButton, NoteDisplay, ListeningIndicator (TDD) | Pending |
 | 9 | App Integration | State machine wiring, full user flow | Pending |
 | 10 | Settings & Persistence | useSettings, SettingsPanel (TDD) | Pending |
