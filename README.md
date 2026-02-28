@@ -2,7 +2,7 @@
 
 **Sing a note. Find out if you nailed it.**
 
-Pitch Doctor plays a short sequence of musical notes, then listens while you sing them back. It tells you — down to the cent — how close you were on each one.
+Pitch Doctor plays a short sequence of musical notes, then listens while you sing them back. It tells you how close you were on each one.
 
 Live at **[pitch.baldivieso.com](https://pitch.baldivieso.com)**
 
