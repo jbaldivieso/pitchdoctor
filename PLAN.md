@@ -197,7 +197,7 @@
 
 ---
 
-## Phase 8: Playback & Listening UI Components
+## Phase 8: Playback & Listening UI Components ✅ (complete)
 
 **Goal**: TDD the interactive UI components: the main action button, the note sequence display, and the listening indicator.
 
@@ -368,7 +368,7 @@
 | 5 | Audio Player | useAudioPlayer with Tone.js (TDD) | Pending |
 | 6 | Pitch Detector | usePitchDetector with mic + pitchy (TDD) | Pending |
 | 7 | Results Display | PitchScale, ResultsPanel (TDD) | Pending |
-| 8 | Playback & Listening UI | PlayButton, NoteDisplay, ListeningIndicator (TDD) | Pending |
+| 8 | Playback & Listening UI | PlayButton, NoteDisplay, ListeningIndicator (TDD) | ✅ Done |
 | 9 | App Integration | State machine wiring, full user flow | Pending |
 | 10 | Settings & Persistence | useSettings, SettingsPanel (TDD) | Pending |
 | 11 | Visual Polish & iOS | Layout, styling, iOS meta tags | Pending |
