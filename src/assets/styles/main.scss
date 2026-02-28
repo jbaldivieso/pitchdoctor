@@ -1,0 +1,42 @@
+// ── Bulma variable overrides ────────────────────────────────────────────────
+// Must come BEFORE the Bulma import.
+
+// Scheme (background / surface)
+$scheme-main:     #1a1a2e;   // Deep navy — main background
+$scheme-main-bis: #16213e;   // Slightly lighter — cards, panels, boxes
+
+// Brand colors
+$primary:  #e94560;          // Coral red — buttons, active states, accents
+$info:     #0f3460;          // Dark blue — secondary buttons, borders
+$success:  #4ecca3;          // Teal green — excellent pitch accuracy (±10¢)
+$warning:  #f0c040;          // Amber — acceptable pitch accuracy (±25¢)
+$danger:   #e94560;          // Same as primary — off pitch / error states
+
+// Text
+$text:       #eaeaea;        // Primary text
+$text-light: #8892a0;        // Secondary text, labels
+
+// Ensure dark mode feels intentional
+$background: $scheme-main;
+
+// ── Bulma import ─────────────────────────────────────────────────────────────
+@import "bulma/bulma";
+
+// ── App-level overrides ───────────────────────────────────────────────────────
+
+// Respect iOS safe area insets
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  background-color: $scheme-main;
+  color: $text;
+  min-height: 100dvh;
+}
+
+// Ensure minimum tap-target sizes per Apple HIG (44×44pt)
+.button.is-large {
+  min-height: 44px;
+  min-width: 44px;
+}
