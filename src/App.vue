@@ -10,12 +10,17 @@ import NoteDisplay from './components/NoteDisplay.vue'
 import ListeningIndicator from './components/ListeningIndicator.vue'
 import ResultsPanel from './components/ResultsPanel.vue'
 import SettingsPanel from './components/SettingsPanel.vue'
+import TabBar from './components/TabBar.vue'
+import BeginnerMode from './components/BeginnerMode.vue'
 
 // Timing constants must match useAudioPlayer internals
 const NOTE_INTERVAL_MS = 1100 // 0.8s duration + 0.3s gap
 
 const { settings } = useSettings()
 const showSettings = ref(false)
+
+type AppMode = 'beginner' | 'practice'
+const activeMode = ref<AppMode>('beginner')
 
 const state = ref<AppState>('idle')
 const currentSequence = ref<NoteSequence>([])
@@ -82,10 +87,17 @@ async function handleNewSequence() {
 const settingsAvailable = computed(
   () => state.value === 'idle' || state.value === 'results'
 )
+
+function handleModeChange(mode: AppMode) {
+  // Prevent switching while practice mode is active
+  if (mode === 'practice' && (state.value === 'playing' || state.value === 'listening')) return
+  activeMode.value = mode
+}
 </script>
 
 <template>
-  <section class="section py-5">
+  <!-- Main content area — padded above the fixed tab bar -->
+  <section class="section py-5" style="padding-bottom: 80px">
     <div class="container" style="max-width: 480px">
 
       <!-- Header -->
@@ -114,49 +126,62 @@ const settingsAvailable = computed(
         </div>
       </transition>
 
-      <!-- Main content area (slide-up transition on state changes) -->
-      <transition name="slide-up" mode="out-in">
-
-        <!-- Listening phase -->
-        <div v-if="state === 'listening'" key="listening" class="mb-5">
-          <ListeningIndicator />
+      <!-- ═══ BEGINNER MODE ═══ -->
+      <transition name="fade" mode="out-in">
+        <div v-if="activeMode === 'beginner'" key="beginner">
+          <BeginnerMode :settings="settings" />
         </div>
 
-        <!-- Playing / idle / results: show note display -->
-        <div v-else key="display" class="mb-5">
-          <NoteDisplay :notes="currentSequence" :activeIndex="activeNoteIndex" />
-        </div>
+        <!-- ═══ PRACTICE MODE ═══ -->
+        <div v-else key="practice">
 
+          <!-- Main content area (slide-up transition on state changes) -->
+          <transition name="slide-up" mode="out-in">
+            <!-- Listening phase -->
+            <div v-if="state === 'listening'" key="listening" class="mb-5">
+              <ListeningIndicator />
+            </div>
+
+            <!-- Playing / idle / results: show note display -->
+            <div v-else key="display" class="mb-5">
+              <NoteDisplay :notes="currentSequence" :activeIndex="activeNoteIndex" />
+            </div>
+          </transition>
+
+          <!-- Results panel (fade in when results arrive) -->
+          <transition name="fade">
+            <div v-if="state === 'results'" class="mb-5">
+              <ResultsPanel :results="pitchResults" />
+            </div>
+          </transition>
+
+          <!-- Mic error message -->
+          <transition name="fade">
+            <div v-if="micError" class="notification is-danger is-light mb-4">
+              <p><strong>Microphone access required</strong></p>
+              <p class="mt-1" style="font-size: 0.9rem;">
+                {{ micError }}. To fix this, open your device Settings → Safari (or your
+                browser) → Microphone and allow access, then reload the page.
+              </p>
+            </div>
+          </transition>
+
+          <!-- Action buttons -->
+          <div class="has-text-centered mt-4">
+            <PlayButton
+              :appState="state"
+              @play="handlePlay"
+              @tryAgain="handleTryAgain"
+              @newSequence="handleNewSequence"
+            />
+          </div>
+
+        </div>
       </transition>
-
-      <!-- Results panel (fade in when results arrive) -->
-      <transition name="fade">
-        <div v-if="state === 'results'" class="mb-5">
-          <ResultsPanel :results="pitchResults" />
-        </div>
-      </transition>
-
-      <!-- Mic error message -->
-      <transition name="fade">
-        <div v-if="micError" class="notification is-danger is-light mb-4">
-          <p><strong>Microphone access required</strong></p>
-          <p class="mt-1" style="font-size: 0.9rem;">
-            {{ micError }}. To fix this, open your device Settings → Safari (or your
-            browser) → Microphone and allow access, then reload the page.
-          </p>
-        </div>
-      </transition>
-
-      <!-- Action buttons -->
-      <div class="has-text-centered mt-4">
-        <PlayButton
-          :appState="state"
-          @play="handlePlay"
-          @tryAgain="handleTryAgain"
-          @newSequence="handleNewSequence"
-        />
-      </div>
 
     </div>
   </section>
+
+  <!-- Fixed bottom tab bar -->
+  <TabBar :activeMode="activeMode" @change="handleModeChange" />
 </template>

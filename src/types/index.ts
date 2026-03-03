@@ -34,6 +34,14 @@ export interface NoteGenerator {
   generate(length: number, config: GeneratorConfig): NoteSequence
 }
 
+/** Live pitch data streamed frame-by-frame during continuous detection */
+export interface LivePitch {
+  frequency: number | null
+  centsDeviation: number | null  // raw cents, NOT octave-normalized
+  clarity: number
+  noteName: string | null
+}
+
 /** Persisted user settings */
 export interface Settings {
   sequenceLength: number
