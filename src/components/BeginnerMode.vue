@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { Note } from 'tonal'
 import type { Settings } from '@/types'
 import type { Note as NoteType } from '@/types'
+import { majorScaleGenerator } from '@/lib/generators/majorScale'
 import { useAudioPlayer } from '@/composables/useAudioPlayer'
 import { usePitchDetector } from '@/composables/usePitchDetector'
 import LivePitchMeter from './LivePitchMeter.vue'
@@ -19,11 +19,19 @@ const { startContinuous, livePitch, error: detectorError } = usePitchDetector()
 
 let stopDetection: (() => void) | null = null
 
-const targetNote = computed<NoteType>(() => {
-  const name = `${props.settings.rootNote}${props.settings.lowOctave}`
-  const freq = Note.freq(name) ?? 261.63
-  return { name, frequency: freq }
-})
+const generatorConfig = computed(() => ({
+  rootNote: props.settings.rootNote,
+  lowOctave: props.settings.lowOctave,
+  highOctave: props.settings.highOctave,
+}))
+
+const targetNote = ref<NoteType>(
+  majorScaleGenerator.generate(1, {
+    rootNote: props.settings.rootNote,
+    lowOctave: props.settings.lowOctave,
+    highOctave: props.settings.highOctave,
+  })[0]
+)
 
 async function handleStart() {
   state.value = 'playing'
@@ -50,6 +58,7 @@ function handlePlayAgain() {
 function handleStop() {
   stopDetection?.()
   stopDetection = null
+  targetNote.value = majorScaleGenerator.generate(1, generatorConfig.value)[0]
   state.value = 'idle'
 }
 </script>
